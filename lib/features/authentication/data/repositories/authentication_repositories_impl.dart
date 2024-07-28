@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/authenticated_reponse.dart';
+import '../../domain/entities/registration_response.dart';
 import '../../domain/repositories/authentication_repository.dart';
 import '../datasources/authentication_local_data_sources.dart';
 import '../datasources/authentication_remote_data_sources.dart';
@@ -58,4 +59,21 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository  {
     await localDataSource.clearAuth();
   }
 
+
+
+  @override
+  Future<Either<Failure, RegistrationResponse>> postRegister(
+      String name, String mobileNo, String password) async {
+    try {
+      final response =
+      await remoteDataSource.postRegister(name, mobileNo, password);
+      return Right(response);
+    } on AuthException {
+      return Left(AuthFailure());
+    } on ServerException {
+      return Left(ServerFailure());
+    } on InputException catch (inputError) {
+      return Left(InputFailure(inputError.message));
+    }
+  }
 }

@@ -1,6 +1,7 @@
 
 //import 'package:fa/core/widgets/input_field.dart';
 
+import 'package:edex_3_6_5/features/authentication/presentation/pages/register/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -180,6 +181,12 @@ class SignInScreenState extends State<SignInScreen> {
               ),
 
               const SizedBox(height: 16),
+              
+              
+              TextButton(onPressed: (){Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const RegisterScreen()),
+              );}, child: Text("Register"))
               //TextButton(onPressed: (){}, child: Text(_translate('site.login.forgot'))),
               //_isLoading ? new CircularProgressIndicator() : primaryButton('          Login          ',(){
 

@@ -10,8 +10,10 @@ import 'features/authentication/domain/repositories/authentication_repository.da
 import 'features/authentication/domain/usecases/clear_auth_local.dart';
 import 'features/authentication/domain/usecases/get_auth_local.dart';
 import 'features/authentication/domain/usecases/post_login.dart';
+import 'features/authentication/domain/usecases/post_register.dart';
 import 'features/authentication/domain/usecases/set_auth_local.dart';
 import 'features/authentication/presentation/cubits/authentication_cubit.dart';
+import 'features/authentication/presentation/pages/register/cubit/register_cubit.dart';
 import 'features/authentication/presentation/pages/signIn/cubit/sign_in_cubit.dart';
 
 // Feature: Authentication
@@ -76,12 +78,14 @@ void initAuthentication() {
   // Cubit
   sl.registerFactory(() => AuthenticationCubit(sl(), sl(), sl()));
   sl.registerFactory(() => SignInCubit(sl()));
+  sl.registerFactory(() => RegisterCubit(sl()));
 
   // Use cases
   sl.registerLazySingleton(() => GetAuthLocal(sl()));
   sl.registerLazySingleton(() => SetAuthLocal(sl()));
   sl.registerLazySingleton(() => ClearAuthLocal(sl()));
   sl.registerLazySingleton(() => PostLogin(sl()));
+  sl.registerLazySingleton(() => PostRegister(sl()));
 
   // Repository
   sl.registerLazySingleton<AuthenticationRepository>(() =>
