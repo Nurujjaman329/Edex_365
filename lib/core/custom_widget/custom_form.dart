@@ -20,7 +20,6 @@ class CustomFormField extends FormField<String> {
   }) : super(
     key: key,
     onSaved: onSaved,
-    //validator: validator,
     initialValue: initialValue,
     builder: (FormFieldState<String> state) {
       return Padding(
@@ -38,14 +37,21 @@ class CustomFormField extends FormField<String> {
           onFieldSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
             labelText: labelText,
+
             hintText: hintText,
             prefixIcon: prefixicon,
             prefixIconConstraints:
             const BoxConstraints(minWidth: 40.0, minHeight: 40.0),
-            prefixIconColor: Colors.blue,
+            prefixIconColor: Color(0XFFF5004F),
             suffixIcon: suffixIconButton,
             errorText: state.errorText,
             border: OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.red,
+                width: 2.0,
+              ),
+            ),
           ),
         ),
       );

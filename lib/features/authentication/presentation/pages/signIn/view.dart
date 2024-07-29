@@ -55,7 +55,8 @@ class SignInScreenState extends State<SignInScreen> {
     return BlocProvider(
         create: (_) => sl<SignInCubit>(),
         child: Scaffold(
-          appBar: null,
+          backgroundColor: Colors.white,
+          appBar: AppBar(backgroundColor:  Color(0XFFF5004F),),
           body:
           BlocConsumer<SignInCubit, SignInState>(builder: (context, state) {
             if (state is SignInLoading || state is SignInSuccessful) {
@@ -146,7 +147,7 @@ class SignInScreenState extends State<SignInScreen> {
               TextFormField(
                   controller: userNameController,
                   decoration: textInputDecoration(
-                      translate('User ID'), const Icon(Icons.person)),
+                      translate('User ID'), const Icon(Icons.person,color:  Color(0XFFF5004F),)),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) =>
                       InputValidator(value!, 'User ID').isEmpty().validate()),
@@ -154,7 +155,7 @@ class SignInScreenState extends State<SignInScreen> {
               TextFormField(
                 controller: passController,
                 decoration: textInputDecoration(
-                    translate("Password"), const Icon(Icons.vpn_key)),
+                    translate("Password"), const Icon(Icons.vpn_key,color:  Color(0XFFF5004F),)),
                 keyboardType: TextInputType.visiblePassword,
                 validator: (value) =>
                     InputValidator(value!, 'Password').isEmpty().validate(),
@@ -186,7 +187,7 @@ class SignInScreenState extends State<SignInScreen> {
               TextButton(onPressed: (){Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const RegisterScreen()),
-              );}, child: Text("Register"))
+              );}, child: Text("Create New Account"))
               //TextButton(onPressed: (){}, child: Text(_translate('site.login.forgot'))),
               //_isLoading ? new CircularProgressIndicator() : primaryButton('          Login          ',(){
 

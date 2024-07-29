@@ -13,7 +13,7 @@ InputDecoration formInputDecoration(String label, Icon? icon) {
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(4.0),
       borderSide: const BorderSide(
-        color: Colors.blueAccent,
+        color: Colors.grey,
         width: 1.0,
       ),
     ),
@@ -24,7 +24,7 @@ InputDecoration formInputDecoration(String label, Icon? icon) {
     // Customize the appearance of the label text
     labelText: label,
     labelStyle: const TextStyle(
-      color: Colors.black,
+      color: Colors.grey,
       fontWeight: FontWeight.bold,
       fontSize: 16.0,
     ),

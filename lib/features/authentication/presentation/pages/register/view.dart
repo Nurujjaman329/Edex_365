@@ -6,6 +6,7 @@ import 'package:edex_3_6_5/features/authentication/domain/usecases/post_register
 import 'package:edex_3_6_5/features/home/presentation/pages/homescreen/view.dart';
 
 import '../../../../../core/custom_widget/custom_form.dart';
+import '../../../../../core/styles/form_input_decoration.dart';
 import '../../../../../core/utils/translate.dart';
 import '../../../../../core/widgets/heading.dart';
 import '../../../../../injection_container.dart';
@@ -86,7 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _scaffold() {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(),
+      appBar: AppBar( title: Text('Registration Screen'), backgroundColor:  Color(0XFFF5004F),),
       body: BlocConsumer<RegisterCubit, RegisterState>(
         listener: (context, state) {
           if (state is RegisterError) {
@@ -143,7 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Form(
             key: _formKey,
             child: Padding(
-              padding: const EdgeInsets.only(top: 50, left: 32, right: 32),
+              padding: const EdgeInsets.only(top: 30, left: 32, right: 32),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,18 +154,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     fit: BoxFit.fitHeight,
                     height: 128,
                   ),
-                  const SizedBox(height: 32),
-                  Heading(
-                    text: _translate('register.registermessage'),
-                    key: UniqueKey(),
-                  ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 20),
+
                   CustomFormField(
                     controller: userNameController,
                     focusNode: _nameFocus,
-                    labelText: translate(context, "register.name"),
-                    hintText: translate(context, "register.name.hinttext"),
-                    prefixicon: const Icon(Icons.person),
+                    labelText: 'Name ',
+                    hintText: 'Enter Your Name ',
+                    prefixicon: const Icon(Icons.person,color:  Color(0XFFF5004F),),
                     onFieldSubmitted: (_) {
                       FocusScope.of(context).requestFocus(_mobileNumberFocus);
                     },
@@ -179,9 +176,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   CustomFormField(
                     controller: phoneController,
                     focusNode: _mobileNumberFocus,
-                    labelText: translate(context, "register.phone"),
-                    hintText: translate(context, "register.phone.hinttext"),
-                    prefixicon: const Icon(Icons.mobile_friendly),
+                    labelText: 'Mobile Number',
+                    hintText: 'Enter Your Mobile Number',
+                    prefixicon: const Icon(Icons.mobile_friendly,color:  Color(0XFFF5004F),),
                     onFieldSubmitted: (_) {
                       FocusScope.of(context).requestFocus(_emailFocus);
                     },
@@ -196,9 +193,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   CustomFormField(
                     controller: emailNameController,
                     focusNode: _emailFocus,
-                    labelText: translate(context, "register.email"),
-                    hintText: translate(context, "register.email.hinttext"),
-                    prefixicon: const Icon(Icons.email),
+                    labelText: 'Email',
+                    hintText: 'Enter Your Email',
+                    prefixicon: const Icon(Icons.email,color:  Color(0XFFF5004F),),
                     onFieldSubmitted: (_) {
                       FocusScope.of(context).requestFocus(_passwordFocus);
                     },
@@ -229,9 +226,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: CustomFormField(
                         controller: dobController,
                         focusNode: _dobFocus,
-                        labelText: translate(context, "register.dob"),
-                        hintText: translate(context, "register.dob.hinttext"),
-                        prefixicon: const Icon(Icons.calendar_today),
+                        labelText: 'Date Of Birth',
+                        hintText:'Date Of Birth',
+                        prefixicon: const Icon(Icons.calendar_today,color:  Color(0XFFF5004F),),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return translate(context, "register.dob.validation");
@@ -244,19 +241,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                   BlocBuilder<UserRoleCubit, UserRoleState>(
                     builder: (context, state) {
-                      if (state is UserRoleLoading) {
-                        return const CircularProgressIndicator();
-                      } else if (state is UserRoleLoaded) {
+                     if (state is UserRoleLoaded) {
                         roles = state.userRoles
                             .map((role) => DropdownMenuItem(
                           value: role.id,
                           child: Text(role.rName),
                         ))
                             .toList();
-                        return DropdownButtonFormField<String>(
+                        return DropdownButtonFormField(
                           items: roles,
                           value: _selectedRole,
-                          hint: Text(translate(context, "register.select_role")),
+                          decoration: formInputDecoration(
+                              'Select Role', null),
                           onChanged: (value) {
                             setState(() {
                               _selectedRole = value;
@@ -266,23 +262,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             if (value == null || value.isEmpty) {
                               return translate(context, "register.role.validation");
                             }
+                            return null;
                           },
                         );
                       } else if (state is UserRoleError) {
-                        return Text(translate(context, "register.role.error"));
+                        return Center(child: Text(translate(context, "register.role.error")));
                       }
-                      return const SizedBox();
+                      return SizedBox();
                     },
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 10),
 
                   CustomFormField(
                     controller: passwordController,
                     focusNode: _passwordFocus,
-                    labelText: translate(context, "register.password"),
-                    hintText: translate(context, "register.password.hinttext"),
+                    labelText: 'Password',
+                    hintText: 'Enter Your Password',
                     obscureText: _passwordVisible,
-                    prefixicon: const Icon(Icons.lock),
+                    prefixicon: const Icon(Icons.lock,color:  Color(0XFFF5004F),),
                     suffixIconButton: IconButton(
                       icon: Icon(
                         _passwordVisible ? Icons.visibility : Icons.visibility_off,
@@ -304,10 +301,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     width: MediaQuery.of(context).size.width * .81,
                     height: MediaQuery.of(context).size.width * .12,
                     decoration: BoxDecoration(
+                      color:  Color(0XFFF5004F),
                       borderRadius: BorderRadius.circular(20.0),
                     ),
-                    child: ElevatedButton(
-                      onPressed: () {
+                    child: InkWell(
+
+                      onTap: () {
                         if (_formKey.currentState!.validate()) {
                           // Create SignUpDetails object
                           final signUpDetails = SignUpDetails(
@@ -337,13 +336,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           );
                         }
                       },
-                      child: Text(translate(context, "common.register")),
+                      child: Center(child: Text('Submit',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,letterSpacing:1 ),)),
                     ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(translate(context, "common.register.message1")),
+                      Text('Already Have an Account ?'),
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).push(
@@ -352,7 +351,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           );
                         },
-                        child: Text(translate(context, "common.login")),
+                        child: Text('Go to Login'),
                       ),
                     ],
                   ),

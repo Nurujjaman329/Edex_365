@@ -24,14 +24,14 @@ class _QuestionHistoryState extends State<QuestionHistory> {
             children: [
               Text(
                 "Question History",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold,color:  Color(0XFF4793AF)),
               ),
               InkWell(
                 onTap: () {},
                 child: Text(
                   "View all",
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.blue),
+                      fontWeight: FontWeight.bold, color:  Color(0XFF4793AF)),
                 ),
               ),
             ],
@@ -54,7 +54,7 @@ class _QuestionHistoryState extends State<QuestionHistory> {
               return SizedBox(
                 width: MediaQuery.of(context).size.width * .44,
                 child: Card(
-                  color: Color.fromARGB(255, 148, 170, 209),
+                  color:  Color(0XFF4793AF),
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
@@ -72,7 +72,7 @@ class _QuestionHistoryState extends State<QuestionHistory> {
                         "Question History",
                         style: TextStyle(
                             fontSize: 15,
-                            color: Colors.black,
+                            color: Colors.white,
                             fontWeight: FontWeight.w500),
                       ),
                     ),

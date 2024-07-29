@@ -103,7 +103,7 @@ class HomeScreenState extends State<HomeScreen> {
       drawer: _drawer(users),
 
       appBar: AppBar(
-        backgroundColor: Color(0XFF60ABE9),
+        backgroundColor: Color(0XFFF5004F),
         //title: Text(translate(context, "admin.menu.dashboard"))
         title: users != null
             ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -137,7 +137,7 @@ class HomeScreenState extends State<HomeScreen> {
             flex: 2,
             child: DrawerHeader(
               decoration: const BoxDecoration(
-                color: Colors.blue,
+                color:   Color(0XFFF5004F),
               ),
               child: Container(
                 width: double.infinity,
@@ -288,12 +288,13 @@ class HomeScreenState extends State<HomeScreen> {
 
   Widget _bottomNavigationBar() {
     return CurvedNavigationBar(
+      backgroundColor: Color(0XFFF5004F),
       index: 0,
       height: 50.0,
       items: <Widget>[
-        Icon(Icons.home, size: 30),
-        Icon(Icons.add, size: 30),
-        Icon(Icons.message, size: 30),
+        Icon(Icons.home, size: 30,color:  Color(0XFF4793AF),),
+        Icon(Icons.add, size: 30,color:  Color(0XFF4793AF),),
+        Icon(Icons.message, size: 30,color:  Color(0XFF4793AF),),
       ],
       onTap: (index) {
         if (index == 0) {
