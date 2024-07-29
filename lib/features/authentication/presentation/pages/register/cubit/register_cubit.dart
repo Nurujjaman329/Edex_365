@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:edex_3_6_5/features/authentication/domain/entities/sign_up_details.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../../../../core/error/failures.dart';
@@ -12,16 +13,19 @@ class RegisterCubit extends Cubit<RegisterState> {
   final PostRegister _postRegister;
   RegisterCubit(this._postRegister) : super(const RegisterInitial());
 
-  Future<void> postRegister(String name, String mobileNo, String password) async {
+  Future<void> postRegister(SignUpDetails signUpDetails) async {
     emit(const RegisterLoading());
 
     final Either<Failure, RegistrationResponse> auth =
-    await _postRegister(name: name, mobileNo: mobileNo, password: password);
+    await _postRegister(signUpDetails);
 
     auth.fold((failure) {
-      emit(const ResgisterError("Phone number already taken"));
+      emit(const RegisterError("Something Wrong"));
     }, (authenticated) {
-      emit(ResgisterSuccessful(authenticated));
+      emit(RegisterSuccessful(authenticated));
     });
   }
+
+
+
 }

@@ -16,16 +16,16 @@ class RegisterLoading extends RegisterState {
   List<Object> get props => [];
 }
 
-class ResgisterSuccessful extends RegisterState {
+class RegisterSuccessful extends RegisterState {
   final RegistrationResponse auth;
-  const ResgisterSuccessful(this.auth);
+  const RegisterSuccessful(this.auth);
   @override
   List<Object> get props => [];
 }
 
-class ResgisterError extends RegisterState {
+class RegisterError extends RegisterState {
   final String message;
-  const ResgisterError(this.message);
+  const RegisterError(this.message);
   @override
   List<Object> get props => [message];
 }

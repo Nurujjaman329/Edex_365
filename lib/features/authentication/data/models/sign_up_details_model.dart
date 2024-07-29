@@ -11,7 +11,7 @@ class SignUpDetailsModel extends SignUpDetails{
   final DateTime? dob;
   final String school;
   final String sClass;
-  final List<UserRolesModel> role;
+  final List<String> role;
 
 
 
@@ -30,7 +30,7 @@ class SignUpDetailsModel extends SignUpDetails{
           : null,
       school: json['school'],
       sClass: json['sClass'],
-      role: (json['role'] as List).map((tJson)=>UserRolesModel.fromJson(tJson)).toList(),
+      role: List<String>.from(json['role']),
     );
   }
 }

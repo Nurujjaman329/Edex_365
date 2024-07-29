@@ -1,3 +1,5 @@
+import 'package:edex_3_6_5/features/authentication/domain/usecases/get_user_role.dart';
+import 'package:edex_3_6_5/features/authentication/presentation/pages/userRole/cubit/user_role_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -79,6 +81,7 @@ void initAuthentication() {
   sl.registerFactory(() => AuthenticationCubit(sl(), sl(), sl()));
   sl.registerFactory(() => SignInCubit(sl()));
   sl.registerFactory(() => RegisterCubit(sl()));
+  sl.registerFactory(() => UserRoleCubit(sl()));
 
   // Use cases
   sl.registerLazySingleton(() => GetAuthLocal(sl()));
@@ -86,6 +89,7 @@ void initAuthentication() {
   sl.registerLazySingleton(() => ClearAuthLocal(sl()));
   sl.registerLazySingleton(() => PostLogin(sl()));
   sl.registerLazySingleton(() => PostRegister(sl()));
+  sl.registerLazySingleton(() => GetUserRoles(sl()));
 
   // Repository
   sl.registerLazySingleton<AuthenticationRepository>(() =>

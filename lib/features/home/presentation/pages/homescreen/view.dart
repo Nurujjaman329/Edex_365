@@ -281,7 +281,7 @@ class HomeScreenState extends State<HomeScreen> {
           Radius.circular(8.0),
         ),
       ),
-      child: Image.asset('assets/images/menu_my_account.png',
+      child: Image.asset('assets/images/edex_logo.png',
           fit: BoxFit.fitHeight, height: 96),
     );
   }

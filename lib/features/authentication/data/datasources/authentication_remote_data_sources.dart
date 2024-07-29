@@ -8,8 +8,12 @@ import '../../../../core/platform/HttpManager.dart';
 import '../../../../injection_container.dart';
 import '../../domain/entities/authenticated_reponse.dart';
 import '../../domain/entities/registration_response.dart';
+import '../../domain/entities/sign_up_details.dart';
+import '../../domain/entities/user_roles.dart';
 import '../models/authenticated_response_model.dart';
 import '../models/registration_response_model.dart';
+import '../models/user_roles_model.dart';
+import '../models/user_roles_response_model.dart';
 
 
 abstract class AuthenticationRemoteDataSource {
@@ -24,7 +28,15 @@ abstract class AuthenticationRemoteDataSource {
   /// Throws a [InputException] for 400 error code.
   /// Or Throws a [ServerException] for all error codes.
   Future<RegistrationResponse> postRegister(
-      String name, String mobileNo, String password);
+      SignUpDetails signUpDetails);
+
+
+
+  /// GET request to login register endpoint.
+  ///
+  /// Throws a [InputException] for 400 error code.
+  /// Or Throws a [ServerException] for all error codes.
+  Future<UserRolesListResponseModel> getUsersRole();
 }
 
 class AuthenticationRemoteDataSourceImpl
@@ -79,16 +91,16 @@ class AuthenticationRemoteDataSourceImpl
 
   @override
   Future<RegistrationResponseModel> postRegister(
-      String name, String mobileNo, String password) async {
+      SignUpDetails signUpDetails) async {
+    log('=>' + signUpDetails.toJson().toString());
     try {
       final response = await client.post(
         '/api/Auth/Signup',
-        data: jsonEncode(<String, String>{
-          'name': name,
-          'mobileNo': mobileNo,
-          'password': password
-        }),
+        data: signUpDetails.toJson()
       );
+      Map body = response.data;
+      log(body.toString());
+      log(response.realUri.toString());
       switch (response.statusCode) {
         case 200:
           return RegistrationResponseModel.fromJson(
@@ -101,11 +113,33 @@ class AuthenticationRemoteDataSourceImpl
           throw ServerException();
       }
     } catch (error) {
+
       // log((error as DioError).response?.data.toString() ?? "Nothing");
       log(error.toString());
       throw ServerException();
     }
   }
+
+
+  @override
+  Future<UserRolesListResponseModel> getUsersRole() async {
+    String url = "/api/Role/s/AllRoles"; // Adjust the URL as needed
+    final response = await client.get(url);
+
+    switch (response.statusCode) {
+      case 200:
+      // Parse the response data as List<dynamic>
+        List<dynamic> body = response.data as List<dynamic>;
+        return UserRolesListResponseModel.fromJson(body);
+      case 404:
+        throw AuthException();
+      default:
+        throw ServerException();
+    }
+  }
+
+
+
 
 
 }

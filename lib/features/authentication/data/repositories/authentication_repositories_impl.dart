@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:edex_3_6_5/features/authentication/domain/entities/user_roles.dart';
 import 'package:meta/meta.dart';
 
 
@@ -7,10 +8,12 @@ import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/authenticated_reponse.dart';
 import '../../domain/entities/registration_response.dart';
+import '../../domain/entities/sign_up_details.dart';
 import '../../domain/repositories/authentication_repository.dart';
 import '../datasources/authentication_local_data_sources.dart';
 import '../datasources/authentication_remote_data_sources.dart';
 import '../models/authenticated_response_model.dart';
+import '../models/user_roles_response_model.dart';
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository  {
 
@@ -63,10 +66,10 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository  {
 
   @override
   Future<Either<Failure, RegistrationResponse>> postRegister(
-      String name, String mobileNo, String password) async {
+      SignUpDetails signUpDetails) async {
     try {
       final response =
-      await remoteDataSource.postRegister(name, mobileNo, password);
+      await remoteDataSource.postRegister(signUpDetails);
       return Right(response);
     } on AuthException {
       return Left(AuthFailure());
@@ -74,6 +77,20 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository  {
       return Left(ServerFailure());
     } on InputException catch (inputError) {
       return Left(InputFailure(inputError.message));
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, UserRolesListResponseModel>>
+  getUsersRole() async {
+    try {
+      final response = await remoteDataSource.getUsersRole();
+      return Right(response);
+    } on AuthException {
+      return Left(AuthFailure());
+    } on ServerException {
+      return Left(ServerFailure());
     }
   }
 }
