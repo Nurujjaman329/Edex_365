@@ -1,11 +1,13 @@
 
 //import 'package:fa/core/widgets/input_field.dart';
 
+import 'package:edex_3_6_5/core/utils/app_colors.dart';
 import 'package:edex_3_6_5/features/authentication/presentation/pages/register/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../config/routes.dart';
+import '../../../../../core/custom_widget/custom_form.dart';
 import '../../../../../core/styles/primary_button.dart';
 import '../../../../../core/styles/text_input_decoration.dart';
 import '../../../../../core/utils/input_validator.dart';
@@ -26,10 +28,13 @@ class SignInScreen extends StatefulWidget {
 class SignInScreenState extends State<SignInScreen> {
   SignInScreenState() : super();
 
-  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+
+  bool _passwordVisible = true;
 
   @override
   void initState() {
@@ -38,7 +43,7 @@ class SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    userNameController.text = "nur@gmail.com"; //4000989
+    emailController.text = "nur@gmail.com"; //4000989
     passController.text = "123"; //4038
 
     return BlocConsumer<AuthenticationCubit, AuthenticationState>(
@@ -56,7 +61,7 @@ class SignInScreenState extends State<SignInScreen> {
         create: (_) => sl<SignInCubit>(),
         child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: AppBar(backgroundColor:  Color(0XFFF5004F),),
+          appBar: AppBar(backgroundColor: AppColors.primaryColor,title: Text('Login Screen'),),
           body:
           BlocConsumer<SignInCubit, SignInState>(builder: (context, state) {
             if (state is SignInLoading || state is SignInSuccessful) {
@@ -87,7 +92,7 @@ class SignInScreenState extends State<SignInScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text("Logged in successfully"),
-                  backgroundColor: Colors.green,
+                  backgroundColor: AppColors.secondaryColor,
                 ),
               );
               Navigator.of(context).pop();
@@ -144,50 +149,107 @@ class SignInScreenState extends State<SignInScreen> {
               Heading(
                   text: translate('Login to your account'), key: UniqueKey()),
               const SizedBox(height: 32),
-              TextFormField(
-                  controller: userNameController,
-                  decoration: textInputDecoration(
-                      translate('User ID'), const Icon(Icons.person,color:  Color(0XFFF5004F),)),
-                  keyboardType: TextInputType.emailAddress,
+
+
+              CustomFormField(
+                controller: emailController,
+
+                labelText: 'Email',
+                hintText: 'Enter Your Email',
+                prefixicon: const Icon(Icons.email,color: AppColors.primaryColor,),
+
                   validator: (value) =>
-                      InputValidator(value!, 'User ID').isEmpty().validate()),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: passController,
-                decoration: textInputDecoration(
-                    translate("Password"), const Icon(Icons.vpn_key,color:  Color(0XFFF5004F),)),
-                keyboardType: TextInputType.visiblePassword,
-                validator: (value) =>
-                    InputValidator(value!, 'Password').isEmpty().validate(),
-                obscureText: true,
+                      InputValidator(value!, 'User ID').isEmpty().validate()
               ),
-              const SizedBox(height: 64),
-              ElevatedButton(
-                style: primaryButton(),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    BlocProvider.of<SignInCubit>(context).postLogin(
-                        userNameController.text, passController.text);
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Please fill up required fields'),
-                        backgroundColor: Colors.red));
-                  }
 
-                  //Navigator.of(context).pushReplacementNamed( appRoutes.home );
-                  /*final signInCubit = context.bloc<SignInCubit>();
-                        signInCubit.postLogin(phoneController,passController);*/
-                },
-                child: Text(translate('Login')),
+
+              const SizedBox(height: 16),
+
+
+
+              CustomFormField(
+                  controller: passController,
+
+                  labelText: 'Password',
+                  hintText: 'Enter Your Password',
+                  prefixicon: const Icon(Icons.lock,color: AppColors.primaryColor,),
+                  obscureText: _passwordVisible,
+                  suffixIconButton: IconButton(
+                    icon: Icon(
+                      _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                      });
+                    },
+                  ),
+
+                  validator: (value) =>
+                      InputValidator(value!, 'Password').isEmpty().validate()
               ),
+              // TextFormField(
+              //     controller: userNameController,
+              //     decoration: textInputDecoration(
+              //         translate('User ID'), const Icon(Icons.person,color:  AppColors.primaryColor,)),
+              //     keyboardType: TextInputType.emailAddress,
+              //     validator: (value) =>
+              //         InputValidator(value!, 'User ID').isEmpty().validate()),
+
+
+
+
+
+
+
+              // TextFormField(
+              //   controller: passController,
+              //   decoration: textInputDecoration(
+              //       translate("Password"), const Icon(Icons.vpn_key,color:  AppColors.primaryColor,)),
+              //   keyboardType: TextInputType.visiblePassword,
+              //   validator: (value) =>
+              //       InputValidator(value!, 'Password').isEmpty().validate(),
+              //   obscureText: true,
+              // ),
+              const SizedBox(height: 20),
+
+
+              Container(
+                width: MediaQuery.of(context).size.width * .81,
+                height: MediaQuery.of(context).size.width * .12,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColor,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: InkWell(
+
+                  onTap: () {
+                    if (_formKey.currentState!.validate()) {
+                      BlocProvider.of<SignInCubit>(context).postLogin(
+                          emailController.text, passController.text);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Please fill up required fields'),
+                          backgroundColor: Colors.red));
+                    }
+                  },
+                  child: Center(child: Text('LogIn',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,letterSpacing:1 ),)),
+                ),
+              ),
+
 
               const SizedBox(height: 16),
               
               
-              TextButton(onPressed: (){Navigator.push(
+              InkWell(onTap: (){Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const RegisterScreen()),
-              );}, child: Text("Create New Account"))
+              );}, child: Row(
+                children: [
+                  Text('Need an Account ? '),
+                  Text("Create New Account",style: TextStyle(color: AppColors.primaryColor,fontWeight: FontWeight.w500),),
+                ],
+              ))
               //TextButton(onPressed: (){}, child: Text(_translate('site.login.forgot'))),
               //_isLoading ? new CircularProgressIndicator() : primaryButton('          Login          ',(){
 

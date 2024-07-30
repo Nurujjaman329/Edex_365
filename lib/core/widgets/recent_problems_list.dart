@@ -24,14 +24,14 @@ class _RecentProblemsState extends State<RecentProblems> {
             children: [
               Text(
                 "Recent Problems",
-                style: TextStyle(fontWeight: FontWeight.bold,color: Color(0XFF4793AF)),
+                style: TextStyle(fontWeight: FontWeight.bold,color: Color(0XFF4682B4)),
               ),
               InkWell(
                 onTap: () {},
                 child: Text(
                   "View all",
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Color(0XFF4793AF)),
+                      fontWeight: FontWeight.bold, color: Color(0XFF4682B4)),
                 ),
               ),
             ],
@@ -54,7 +54,7 @@ class _RecentProblemsState extends State<RecentProblems> {
               return SizedBox(
                 width: MediaQuery.of(context).size.width * .44,
                 child: Card(
-                  color: Color(0XFF4793AF),
+                  color: Color(0XFF4682B4),
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),

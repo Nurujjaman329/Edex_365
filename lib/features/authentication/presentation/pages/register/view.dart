@@ -7,6 +7,7 @@ import 'package:edex_3_6_5/features/home/presentation/pages/homescreen/view.dart
 
 import '../../../../../core/custom_widget/custom_form.dart';
 import '../../../../../core/styles/form_input_decoration.dart';
+import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/translate.dart';
 import '../../../../../core/widgets/heading.dart';
 import '../../../../../injection_container.dart';
@@ -72,7 +73,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           if (state is Authenticated) {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => HomeScreen(),
+                builder: (context) => SignInScreen(),
               ),
             );
           }
@@ -87,7 +88,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _scaffold() {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar( title: Text('Registration Screen'), backgroundColor:  Color(0XFFF5004F),),
+      appBar: AppBar( title: Text('Registration Screen'), backgroundColor: AppColors.primaryColor,),
       body: BlocConsumer<RegisterCubit, RegisterState>(
         listener: (context, state) {
           if (state is RegisterError) {
@@ -102,13 +103,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(translate(context, "loginpage.login_wait")),
+                content: Text('Please Wait'),
               ),
             );
           } else if (state is RegisterSuccessful) {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => HomeScreen(),
+                builder: (context) => SignInScreen(),
               ),
             );
           }
@@ -161,7 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     focusNode: _nameFocus,
                     labelText: 'Name ',
                     hintText: 'Enter Your Name ',
-                    prefixicon: const Icon(Icons.person,color:  Color(0XFFF5004F),),
+                    prefixicon: const Icon(Icons.person,color: AppColors.primaryColor,),
                     onFieldSubmitted: (_) {
                       FocusScope.of(context).requestFocus(_mobileNumberFocus);
                     },
@@ -176,9 +177,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   CustomFormField(
                     controller: phoneController,
                     focusNode: _mobileNumberFocus,
+                    keyboardType: TextInputType.number,
                     labelText: 'Mobile Number',
                     hintText: 'Enter Your Mobile Number',
-                    prefixicon: const Icon(Icons.mobile_friendly,color:  Color(0XFFF5004F),),
+                    prefixicon: const Icon(Icons.mobile_friendly,color: AppColors.primaryColor,),
                     onFieldSubmitted: (_) {
                       FocusScope.of(context).requestFocus(_emailFocus);
                     },
@@ -195,7 +197,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     focusNode: _emailFocus,
                     labelText: 'Email',
                     hintText: 'Enter Your Email',
-                    prefixicon: const Icon(Icons.email,color:  Color(0XFFF5004F),),
+                    prefixicon: const Icon(Icons.email,color: AppColors.primaryColor,),
                     onFieldSubmitted: (_) {
                       FocusScope.of(context).requestFocus(_passwordFocus);
                     },
@@ -228,7 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         focusNode: _dobFocus,
                         labelText: 'Date Of Birth',
                         hintText:'Date Of Birth',
-                        prefixicon: const Icon(Icons.calendar_today,color:  Color(0XFFF5004F),),
+                        prefixicon: const Icon(Icons.calendar_today,color: AppColors.primaryColor,),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return translate(context, "register.dob.validation");
@@ -239,39 +241,98 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 5),
 
-                  BlocBuilder<UserRoleCubit, UserRoleState>(
+
+
+
+
+
+
+                  BlocConsumer<UserRoleCubit, UserRoleState>(
+                    listener: (context, state) {
+                      if (state is UserRoleLoaded) {
+                        setState(() {
+                          roles = state.userRoles
+                              .map((role) => DropdownMenuItem<String>(
+                            value: role.id,
+                            child: Text(role.rName),
+                          ))
+                              .toList();
+                        });
+                      }
+                    },
                     builder: (context, state) {
-                     if (state is UserRoleLoaded) {
-                        roles = state.userRoles
-                            .map((role) => DropdownMenuItem(
-                          value: role.id,
-                          child: Text(role.rName),
-                        ))
-                            .toList();
+                      if (state is UserRoleLoading) {
                         return DropdownButtonFormField(
-                          items: roles,
-                          value: _selectedRole,
-                          decoration: formInputDecoration(
-                              'Select Role', null),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedRole = value;
-                            });
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return translate(context, "register.role.validation");
-                            }
-                            return null;
-                          },
+                          decoration: formInputDecoration('Loading..', null),
+                          items: [],
+                          onChanged: (_) {},
                         );
-                      } else if (state is UserRoleError) {
+                      }
+
+                      if (state is UserRoleError) {
                         return Center(child: Text(translate(context, "register.role.error")));
                       }
-                      return SizedBox();
+
+                      return DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        value: _selectedRole,
+                        decoration: formInputDecoration('Select Role', null),
+                        items: roles,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedRole = value;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return translate(context, "register.role.validation");
+                          }
+                          return null;
+                        },
+                      );
                     },
                   ),
                   const SizedBox(height: 10),
+
+
+
+
+
+
+
+                  // BlocBuilder<UserRoleCubit, UserRoleState>(
+                  //   builder: (context, state) {
+                  //    if (state is UserRoleLoaded) {
+                  //       roles = state.userRoles
+                  //           .map((role) => DropdownMenuItem(
+                  //         value: role.id,
+                  //         child: Text(role.rName),
+                  //       ))
+                  //           .toList();
+                  //       return DropdownButtonFormField(
+                  //         items: roles,
+                  //         value: _selectedRole,
+                  //         decoration: formInputDecoration(
+                  //             'Select Role', null),
+                  //         onChanged: (value) {
+                  //           setState(() {
+                  //             _selectedRole = value;
+                  //           });
+                  //         },
+                  //         validator: (value) {
+                  //           if (value == null || value.isEmpty) {
+                  //             return translate(context, "register.role.validation");
+                  //           }
+                  //           return null;
+                  //         },
+                  //       );
+                  //     } else if (state is UserRoleError) {
+                  //       return Center(child: Text(translate(context, "register.role.error")));
+                  //     }
+                  //     return SizedBox();
+                  //   },
+                  // ),
+                  // const SizedBox(height: 10),
 
                   CustomFormField(
                     controller: passwordController,
@@ -279,7 +340,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     labelText: 'Password',
                     hintText: 'Enter Your Password',
                     obscureText: _passwordVisible,
-                    prefixicon: const Icon(Icons.lock,color:  Color(0XFFF5004F),),
+                    prefixicon: const Icon(Icons.lock,color: AppColors.primaryColor,),
                     suffixIconButton: IconButton(
                       icon: Icon(
                         _passwordVisible ? Icons.visibility : Icons.visibility_off,
@@ -301,14 +362,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     width: MediaQuery.of(context).size.width * .81,
                     height: MediaQuery.of(context).size.width * .12,
                     decoration: BoxDecoration(
-                      color:  Color(0XFFF5004F),
+                      color: AppColors.primaryColor,
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     child: InkWell(
 
                       onTap: () {
                         if (_formKey.currentState!.validate()) {
-                          // Create SignUpDetails object
+
                           final signUpDetails = SignUpDetails(
                             name: userNameController.text,
                             mobileNo: phoneController.text,
@@ -323,13 +384,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             role: _selectedRole != null ? [_selectedRole!] : [],
                           );
 
-                          // Call postRegister with the SignUpDetails object
+
                           BlocProvider.of<RegisterCubit>(context).postRegister(signUpDetails);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                translate(context, "common.fill_up_required_fields"),
+                              'Please filled the required fields'
                               ),
                               backgroundColor: Colors.red,
                             ),

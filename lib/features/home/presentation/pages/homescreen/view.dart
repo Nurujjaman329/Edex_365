@@ -1,20 +1,17 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../config/routes.dart';
+import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/widgets/payment_card.dart';
 import '../../../../../core/widgets/question_history.dart';
 import '../../../../../core/widgets/recent_problems_list.dart';
 import '../../../../authentication/domain/entities/authenticated_reponse.dart';
 import '../../../../authentication/presentation/cubits/authentication_cubit.dart';
 import 'new_problem_create_page.dart';
-
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -30,6 +27,7 @@ class HomeScreenState extends State<HomeScreen> {
     version: 'Unknown',
     buildNumber: 'Unknown',
   );
+
   @override
   void initState() {
     super.initState();
@@ -43,88 +41,59 @@ class HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  //_callNumber() async {
-  //  const number = '';
-  //  bool? res = await FlutterPhoneDirectCaller.callNumber(number);
-  //}
-
-  var connectivitySubscription;
-
-  final List<String> imageUrls = [
-    "https://static.edokan.co/meghnalife/1_1.png",
-    "https://static.edokan.co/meghnalife/1_2.png",
-    "https://static.edokan.co/meghnalife/1_3.png",
-    "https://static.edokan.co/meghnalife/1_4.png",
-  ];
-
-  //@override
-  //void initState() {
-  //  super.initState();
-  //}
-
-  //Future<void> refreshData() async {
-  //_isLoading = true;
-
-  /*var data = await getDashboard(context);
-    _cStores = data['countries'];
-    _orders = data['orders'];
-
-    _cartItems = await getCart(context);
-
-    _acceptList = await getDisclaimerAccepts();
-
-    _isLoading = false;
-    setState(() {});*/
-  //}
+  DateTime? currentBackPressTime;
+  int _selectedIndex = 0;
+  final PageController _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: onWillPop,
       child: BlocBuilder<AuthenticationCubit, AuthenticationState>(
-          builder: (context, authState) {
-            AuthenticatedResponse user;
-            if (authState is Authenticated) {
-              user = authState.auth;
-              return _scaffold(user);
-            } else {
-              return _scaffold(null);
-            }
-          }),
+        builder: (context, authState) {
+          AuthenticatedResponse user;
+          if (authState is Authenticated) {
+            user = authState.auth;
+            return _scaffold(user);
+          } else {
+            return _scaffold(null);
+          }
+        },
+      ),
     );
   }
 
-/* Actions */
-
-/* Widgets */
   Widget _scaffold(AuthenticatedResponse? users) {
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: _drawer(users),
-
       appBar: AppBar(
-        backgroundColor: Color(0XFFF5004F),
-        //title: Text(translate(context, "admin.menu.dashboard"))
+        backgroundColor: AppColors.primaryColor,
         title: users != null
             ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(users.name),
+          Text(users.name),
         ])
             : const Text("Edex-365"),
-        //actions: [_languageButton()],
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 10.0),
+            child: Icon(Icons.notifications),
+          )
+        ],
       ),
-      //appBar: AppBar(
-      //  title: Text(translate(context, "homepage.myPolicies.appbar")),
-      //  //actions: <Widget>[_actionSearch()],
-      //),
-      body: _scaffoldBody(users),
-      //floatingActionButton: FloatingActionButton(
-      //  backgroundColor: Color(0XFFF70405),
-      //  onPressed: () {
-      //    Navigator.of(context as BuildContext)
-      //        .push(MaterialPageRoute(builder: (context) => AddPolicyScreen()));
-      //  },
-      //  child: const Icon(Icons.add),
-      //),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        children: [
+          _scaffoldBody(users),
+          NewProblemCreate(),
+          Center(child: Text("Messages - Coming Soon")),
+        ],
+      ),
       bottomNavigationBar: _bottomNavigationBar(),
     );
   }
@@ -137,7 +106,7 @@ class HomeScreenState extends State<HomeScreen> {
             flex: 2,
             child: DrawerHeader(
               decoration: const BoxDecoration(
-                color:   Color(0XFFF5004F),
+                color: AppColors.primaryColor,
               ),
               child: Container(
                 width: double.infinity,
@@ -167,18 +136,6 @@ class HomeScreenState extends State<HomeScreen> {
                     //FlutterPhoneDirectCaller.callNumber("09613-440 440");
                   },
                 ),
-                ListTile(
-                  title: const Text("Update App"),
-                  onTap: () async {
-                    var url =
-                        "https://play.google.com/store/apps/details?id=com.meghnalife.app.fa";
-                    if (await canLaunch(url)) {
-                      await launch(url);
-                    } else {
-                      throw 'Could not launch $url';
-                    }
-                  },
-                ),
                 users != null
                     ? ListTile(
                   title: const Text("Log Out"),
@@ -204,18 +161,17 @@ class HomeScreenState extends State<HomeScreen> {
   Widget _scaffoldBody(AuthenticatedResponse? user) {
     return Builder(builder: (BuildContext context) {
       return Container(
-          padding: const EdgeInsets.all(5),
-          child: Column(
-            children: [
-              PaymentCard(),
-              RecentProblems(),
-              QuestionHistory(),
-            ],
-          ));
+        padding: const EdgeInsets.all(5),
+        child: Column(
+          children: [
+            PaymentCard(),
+            RecentProblems(),
+            QuestionHistory(),
+          ],
+        ),
+      );
     });
   }
-
-  DateTime? currentBackPressTime;
 
   Future<bool> onWillPop() async {
     DateTime now = DateTime.now();
@@ -229,46 +185,6 @@ class HomeScreenState extends State<HomeScreen> {
       return Future.value(false);
     }
     return Future.value(true);
-  }
-
-  Widget _login() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-        child: InkWell(
-          onTap: () {
-            Navigator.of(context).pushNamed(AppRoutes.signIn);
-          },
-          child: const Text(
-            'Log in',
-            textScaleFactor: 1.5,
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _logout() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-        child: InkWell(
-          onTap: () {
-            BlocProvider.of<AuthenticationCubit>(context).signOut();
-          },
-          child: const Text(
-            'Log Out',
-            textScaleFactor: 1.5,
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   Widget _imagePlaceholder() {
@@ -288,27 +204,29 @@ class HomeScreenState extends State<HomeScreen> {
 
   Widget _bottomNavigationBar() {
     return CurvedNavigationBar(
-      backgroundColor: Color(0XFFF5004F),
-      index: 0,
-      height: 50.0,
-      items: <Widget>[
-        Icon(Icons.home, size: 30,color:  Color(0XFF4793AF),),
-        Icon(Icons.add, size: 30,color:  Color(0XFF4793AF),),
-        Icon(Icons.message, size: 30,color:  Color(0XFF4793AF),),
-      ],
+      index: _selectedIndex,
       onTap: (index) {
-        if (index == 0) {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => HomeScreen()));
-        } else if (index == 1) {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => NewProblemCreate()));
-        } else if (index == 2) {
-          SnackBar(content: Text("Coming Soon"));
-        }
+        setState(() {
+          _selectedIndex = index;
+        });
+        _pageController.jumpToPage(index);
       },
+      backgroundColor: Colors.white,
+      color: AppColors.primaryColor,
+      buttonBackgroundColor: AppColors.primaryColor,
+      items: const [
+        Icon(Icons.home, color: Colors.white),
+        Icon(Icons.add, color: Colors.white),
+        Icon(Icons.message, color: Colors.white),
+      ],
     );
   }
+}
+
+
+
+
+
 
 //Widget _profileImage(AuthenticatedResponse user) {
 //  return BlocProvider(
@@ -341,4 +259,4 @@ class HomeScreenState extends State<HomeScreen> {
 //        listener: (myAccountContext, state) {}),
 //  );
 //}
-}
+

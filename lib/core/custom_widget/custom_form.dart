@@ -14,7 +14,7 @@ class CustomFormField extends FormField<String> {
     final List<TextInputFormatter>? inputFormatters,
     final ValueChanged<String>? onFieldSubmitted,
     final TextEditingController? controller,
-    final TextInputType? keyBoardType,
+    final TextInputType? keyboardType,
     String? initialValue,
     bool obscureText = false,
   }) : super(
@@ -28,7 +28,7 @@ class CustomFormField extends FormField<String> {
         ),
         child: TextFormField(
           inputFormatters: inputFormatters,
-          keyboardType: keyBoardType,
+          keyboardType: keyboardType,
           obscureText: obscureText,
           validator: validator,
           controller: controller,

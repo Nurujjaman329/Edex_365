@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:edex_3_6_5/features/authentication/domain/entities/authenticated_reponse.dart';
 import 'package:edex_3_6_5/features/authentication/domain/entities/sign_up_details.dart';
 import 'package:equatable/equatable.dart';
 
