@@ -4,23 +4,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import '../../../../../config/routes.dart';
-import '../../../../../core/utils/app_colors.dart';
-import '../../../../../core/widgets/payment_card.dart';
-import '../../../../../core/widgets/question_history.dart';
-import '../../../../../core/widgets/recent_problems_list.dart';
-import '../../../../authentication/domain/entities/authenticated_reponse.dart';
-import '../../../../authentication/presentation/cubits/authentication_cubit.dart';
-import 'new_problem_create_page.dart';
+import '../../../../../../config/routes.dart';
+import '../../../../../../core/utils/app_colors.dart';
+import '../../../../../../core/widgets/payment_card.dart';
+import '../../../../../../core/widgets/question_history.dart';
+import '../../../../../../core/widgets/recent_problems_list.dart';
+import '../../../../../authentication/domain/entities/authenticated_reponse.dart';
+import '../../../../../authentication/presentation/cubits/authentication_cubit.dart';
+import '../new_problem_create_page.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+
+class TeacherHomePage extends StatefulWidget {
+  const TeacherHomePage({Key? key}) : super(key: key);
 
   @override
-  HomeScreenState createState() => HomeScreenState();
+  TeacherHomePageState createState() => TeacherHomePageState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class TeacherHomePageState extends State<TeacherHomePage> {
   PackageInfo _packageInfo = PackageInfo(
     appName: 'Unknown',
     packageName: 'Unknown',
@@ -199,7 +200,6 @@ class HomeScreenState extends State<HomeScreen> {
                   children: [
                     PaymentCard(),
                     RecentProblems(),
-                    QuestionHistory(),
                     PaymentCard(),
                   ],
                 ),

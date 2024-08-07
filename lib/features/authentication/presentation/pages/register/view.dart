@@ -107,6 +107,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             );
           } else if (state is RegisterSuccessful) {
+
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Registration Successfully"),
+                backgroundColor: AppColors.secondaryColor,
+              ),
+            );
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => SignInScreen(),

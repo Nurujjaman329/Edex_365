@@ -31,4 +31,21 @@ class SignUpDetails extends Equatable {
       'role': role,
     };
   }
+
+
+
+
+  factory SignUpDetails.empty() {
+    return SignUpDetails(
+      name: '',
+      mobileNo: '',
+      status: false,
+      email: '',
+      password: '',
+      dob: null,
+      school: '',
+      sClass: '',
+      role: [],
+    );
+  }
 }

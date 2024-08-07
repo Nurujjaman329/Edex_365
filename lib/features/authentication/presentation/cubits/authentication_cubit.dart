@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/platform/HttpManager.dart';
 import '../../domain/entities/authenticated_reponse.dart';
+import '../../domain/entities/sign_up_details.dart';
 import '../../domain/usecases/clear_auth_local.dart';
 import '../../domain/usecases/get_auth_local.dart';
 import '../../domain/usecases/set_auth_local.dart';

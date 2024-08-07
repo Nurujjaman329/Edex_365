@@ -11,44 +11,73 @@ class _PaymentCardState extends State<PaymentCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * .15,
-      width: double.infinity,
-      margin: EdgeInsets.only(left: 10.0, right: 10.0),
-      padding: const EdgeInsets.all(1.0),
+      margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.blueAccent, width: .1),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 10,
+            offset: Offset(0, 3),
+          ),
+        ],
       ),
-      child: Card(
-        color: Colors.white70,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(
-              children: [
-                Text("Balance: "),
-                Text(
-                  "500",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ],
+            Container(
+              color: Colors.blueAccent,
+              padding: const EdgeInsets.all(15),
+              child: Text(
+                "Account Balance",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-            Wrap(
-              children: [
-                Text("Spot Balance: "),
-                Text(
-                  "100",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ],
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildBalanceRow("Balance: ", "500"),
+                  SizedBox(height: 10),
+                  _buildBalanceRow("Spot Balance: ", "100"),
+                ],
+              ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildBalanceRow(String label, String amount) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.black.withOpacity(0.7),
+          ),
+        ),
+        Text(
+          amount,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.blueAccent,
+          ),
+        ),
+      ],
     );
   }
 }

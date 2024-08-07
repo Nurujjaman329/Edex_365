@@ -1,7 +1,10 @@
 
 //import 'package:fa/core/widgets/input_field.dart';
 
+import 'dart:developer';
+
 import 'package:edex_3_6_5/core/utils/app_colors.dart';
+import 'package:edex_3_6_5/features/authentication/presentation/pages/otp_verify_page/otp_verify_page.dart';
 import 'package:edex_3_6_5/features/authentication/presentation/pages/register/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +16,8 @@ import '../../../../../core/styles/text_input_decoration.dart';
 import '../../../../../core/utils/input_validator.dart';
 import '../../../../../core/widgets/heading.dart';
 import '../../../../../injection_container.dart';
+import '../../../../home/presentation/pages/homescreen/teacher_home_screen/teacher_home_page.dart';
+import '../../../domain/entities/sign_up_details.dart';
 import '../../cubits/authentication_cubit.dart';
 import 'cubit/sign_in_cubit.dart';
 
@@ -33,8 +38,14 @@ class SignInScreenState extends State<SignInScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
+  final  SignUpDetails signUpDetails = SignUpDetails.empty();
+
 
   bool _passwordVisible = true;
+
+
+
+
 
   @override
   void initState() {
@@ -51,7 +62,12 @@ class SignInScreenState extends State<SignInScreen> {
           return _scaffold();
         }, listener: (context, state) {
       if (state is Authenticated) {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+
+
+        log(state.auth.type);
+      state.auth.type == 'Student' ?
+        Navigator.of(context).pushReplacementNamed(AppRoutes.home): Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>TeacherHomePage()));
+
       }
     });
   }
@@ -244,12 +260,22 @@ class SignInScreenState extends State<SignInScreen> {
               InkWell(onTap: (){Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const RegisterScreen()),
-              );}, child: Row(
+              );
+                }, child: Row(
                 children: [
                   Text('Need an Account ? '),
                   Text("Create New Account",style: TextStyle(color: AppColors.primaryColor,fontWeight: FontWeight.w500),),
+                
                 ],
-              ))
+              ),
+              ),
+              InkWell(onTap: (){Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const OtpVerifyPage()),
+              );
+                },
+                child: Text('Otp'),
+              ),
               //TextButton(onPressed: (){}, child: Text(_translate('site.login.forgot'))),
               //_isLoading ? new CircularProgressIndicator() : primaryButton('          Login          ',(){
 
