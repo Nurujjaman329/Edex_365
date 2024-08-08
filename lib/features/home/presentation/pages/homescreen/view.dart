@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,12 @@ class HomeScreenState extends State<HomeScreen> {
     buildNumber: 'Unknown',
   );
 
+  bool _showBalance = false;
+  String _balance = "1000.00"; // Replace with actual balance fetching logic
+  DateTime? currentBackPressTime;
+  int _selectedIndex = 0;
+  final PageController _pageController = PageController();
+
   @override
   void initState() {
     super.initState();
@@ -42,9 +49,17 @@ class HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  DateTime? currentBackPressTime;
-  int _selectedIndex = 0;
-  final PageController _pageController = PageController();
+  void _onBalanceClick() {
+    setState(() {
+      _showBalance = true;
+    });
+
+    Timer(Duration(seconds: 3), () {
+      setState(() {
+        _showBalance = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,20 +83,6 @@ class HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: _drawer(users),
-      // appBar: AppBar(
-      //   backgroundColor: AppColors.primaryColor,
-      //   title: users != null
-      //       ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      //     Text(users.name),
-      //   ])
-      //       : const Text("Edex-365"),
-      //   actions: [
-      //     Padding(
-      //       padding: EdgeInsets.only(right: 10.0),
-      //       child: Icon(Icons.notifications),
-      //     )
-      //   ],
-      // ),
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
@@ -93,7 +94,6 @@ class HomeScreenState extends State<HomeScreen> {
           _scaffoldBody(users),
           NewProblemCreate(),
           Center(child: Text("Messages - Coming Soon")),
-
         ],
       ),
       bottomNavigationBar: _bottomNavigationBar(),
@@ -175,7 +175,15 @@ class HomeScreenState extends State<HomeScreen> {
           floating: false,
           pinned: true,
           flexibleSpace: FlexibleSpaceBar(
-            title: Text(user != null ? (user.name + '->' + user.type): "Edex-365",style: TextStyle(fontSize: 10),),
+            title:  user!=null ? Row(
+              children: [
+                _imagePlaceholder(),
+                Padding(
+                  padding:  EdgeInsets.only(left: 10.0),
+                  child: _balanceSlider(),
+                ),
+              ],
+            ) : SizedBox(),
             background: Stack(
               fit: StackFit.expand,
               children: [
@@ -203,10 +211,12 @@ class HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(5),
                 child: Column(
                   children: [
+                    // _balanceSlider(),
                     PaymentCard(),
                     RecentProblems(),
                     QuestionHistory(),
                     PaymentCard(),
+
                   ],
                 ),
               ),
@@ -214,6 +224,27 @@ class HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _balanceSlider() {
+    return GestureDetector(
+      onTap: _onBalanceClick,
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        width: _showBalance ? MediaQuery.of(context).size.height *.15 : MediaQuery.of(context).size.height *.13,
+        height: MediaQuery.of(context).size.height *.025,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Center(
+          child: Text(
+            _showBalance ? "Balance: $_balance" : "Check Your Balance",
+            style: TextStyle(color: Colors.black,fontSize: 10.0),
+          ),
+        ),
+      ),
     );
   }
 
@@ -242,7 +273,7 @@ class HomeScreenState extends State<HomeScreen> {
         ),
       ),
       child: Image.asset('assets/images/edex_logo.png',
-          fit: BoxFit.fitHeight, height: 96),
+          fit: BoxFit.fitHeight, height: 15),
     );
   }
 
@@ -266,7 +297,3 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-
-
-
