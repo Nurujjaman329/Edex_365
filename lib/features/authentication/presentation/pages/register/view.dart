@@ -249,12 +249,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 5),
 
-
-
-
-
-
-
                   BlocConsumer<UserRoleCubit, UserRoleState>(
                     listener: (context, state) {
                       if (state is UserRoleLoaded) {
@@ -301,12 +295,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                   const SizedBox(height: 10),
-
-
-
-
-
-
 
                   // BlocBuilder<UserRoleCubit, UserRoleState>(
                   //   builder: (context, state) {
@@ -385,10 +373,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             email: emailNameController.text,
                             password: passwordController.text,
                             dob: dobController.text.isNotEmpty
-                                ? DateTime.parse(dobController.text) // Parse the DOB from text
+                                ? DateTime.parse(dobController.text)
                                 : null,
-                            school: userNameController.text, // Update as needed
-                            sClass: userNameController.text, // Update as needed
+                            school: userNameController.text,
+                            sClass: userNameController.text,
                             role: _selectedRole != null ? [_selectedRole!] : [],
                           );
 

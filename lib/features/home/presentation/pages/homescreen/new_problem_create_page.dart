@@ -23,7 +23,8 @@ class _NewProblemCreateState extends State<NewProblemCreate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: null,
+      appBar: AppBar(title: Text('Submit Your Problem'),centerTitle: true,
+      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(

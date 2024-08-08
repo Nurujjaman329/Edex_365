@@ -1,4 +1,5 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -92,6 +93,7 @@ class HomeScreenState extends State<HomeScreen> {
           _scaffoldBody(users),
           NewProblemCreate(),
           Center(child: Text("Messages - Coming Soon")),
+
         ],
       ),
       bottomNavigationBar: _bottomNavigationBar(),
@@ -162,6 +164,12 @@ class HomeScreenState extends State<HomeScreen> {
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.notifications),
+            ),
+          ],
           backgroundColor: AppColors.primaryColor,
           expandedHeight: 200.0,
           floating: false,
@@ -188,8 +196,6 @@ class HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-
-
         SliverList(
           delegate: SliverChildListDelegate(
             [
@@ -210,7 +216,6 @@ class HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
-
 
   Future<bool> onWillPop() async {
     DateTime now = DateTime.now();
@@ -256,7 +261,7 @@ class HomeScreenState extends State<HomeScreen> {
       items: const [
         Icon(Icons.home, color: Colors.white),
         Icon(Icons.add, color: Colors.white),
-        Icon(Icons.message, color: Colors.white),
+        Icon(CupertinoIcons.profile_circled, color: Colors.white),
       ],
     );
   }
