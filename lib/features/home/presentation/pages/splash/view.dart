@@ -96,7 +96,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             },
           ),
           const SizedBox(height: 32),
-          const Text("Please wait.."),
+          const Text("Please wait..."),
           const SizedBox(height: 32),
 
         ],
